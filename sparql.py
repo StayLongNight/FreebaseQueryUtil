@@ -10,6 +10,10 @@ sparql_util_conf = {
         'indent':True
     },
     'goole-api-url':'https://kgsearch.googleapis.com:443/v1/entities:search',
+    'proxies':{
+            "http": "http://127.0.0.1:10809",
+            "https": "http://127.0.0.1:10809",
+        }
 }
 
 class SparqlUtil():
@@ -22,11 +26,7 @@ class SparqlUtil():
     def find_entity(self,query):
         data = dict(self.sparql_util_conf['entity_link_conf'])
         data['query'] = query
-        proxies = {
-            "http": "http://127.0.0.1:10809",
-            "https": "http://127.0.0.1:10809",
-        }
-        result = requests.get(self.sparql_util_conf['goole-api-url'],params=data,proxies=proxies,verify=False)
+        result = requests.get(self.sparql_util_conf['goole-api-url'],params=data,proxies=self.sparql_util_conf['proxies'],verify=False)
         result = result.json()
         query_result = []
         for item in result["itemListElement"]:
